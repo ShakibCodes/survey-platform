@@ -118,27 +118,39 @@ a {
 /* =================================
    4. Sidebar Menu (With Slide Animation)
    ================================= */
+/* style.css - around line 159 */
+/* SIDEBAR — Hidden by default */
 .sidebar {
     position: fixed;
     top: 0;
-    left: calc(0 - var(--sidebar-width)); /* Start off-screen */
+    left: 0; /* this stays fixed, but transform hides it fully */
     width: var(--sidebar-width);
-    height: 100%;
+    height: 100vh;
     background-color: var(--color-bg-secondary);
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     padding-top: var(--header-height);
     z-index: 999;
-    transition: left 0.35s cubic-bezier(0.2, 0.8, 0.5, 1); /* Enhanced easing for slide */
+
+    /* Hide completely */
+    transform: translateX(-100%);
+
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.5, 1);
 }
 
+/* When opened */
 .sidebar.open {
-    left: 0;
+    transform: translateX(0);
 }
 
+.sidebar-nav {
+    padding: 10px 0;
+}
 .sidebar-nav a {
-    display: flex;
+    display: flex; 
     align-items: center;
-    padding: 15px 20px;
+    padding: 15px 20px; 
+    width: 100%; /* This is correct for full background width */
+    
     font-size: 1rem;
     font-weight: 600;
     color: var(--color-text-primary);
@@ -151,9 +163,22 @@ a {
     width: 20px;
 }
 
-.sidebar-nav a:hover, .sidebar-nav .active {
-    background-color: var(--color-bg-primary);
+.sidebar-nav a:hover, 
+.sidebar-nav .active {
+    /* The background is now 100% width */
+    background-color: var(--color-bg-primary); 
     color: var(--color-accent-red);
+    
+    /* --- CRITICAL FIXES BELOW --- */
+    
+    /* 1. We'll use a box-shadow trick to get the red line */
+    /* This places the shadow INSIDE the background, touching the left edge */
+    box-shadow: inset 4px 0 0 0 var(--color-accent-red);
+
+    /* 2. REMOVE the border-left and padding-left adjustments */
+    /* These were creating the gap */
+    border-left: none; /* Make sure no other border is inherited */
+    padding-left: 20px; /* Reset padding to the original value */
 }
 
 /* Overlay for outside-click close */
@@ -268,45 +293,3 @@ a {
         margin-right: 20px;
     }
 }
-/* Toggle Button */
-.menu-btn {
-    position: fixed;
-    left: 20px;
-    top: 20px;
-    font-size: 26px;
-    cursor: pointer;
-    z-index: 1000;
-}
-
-/* Sidebar */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px;        /* hidden by default */
-    width: 250px;
-    height: 100%;
-    background: #f5f5f5;
-    padding-top: 80px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding-left: 20px;
-    transition: left 0.3s ease;
-    z-index: 999;
-}
-
-.sidebar a {
-    text-decoration: none;
-    color: #111;
-    font-size: 17px;
-}
-
-.sidebar a:hover {
-    opacity: 0.6;
-}
-
-/* When sidebar is visible */
-.sidebar.open {
-    left: 0;
-}
-    
